@@ -37,11 +37,11 @@
   "size-limit": [
     {
       "path": "dist/ab-designer.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "50 KB"
     },
     {
       "path": "dist/ab-designer.esm.js",
-      "limit": "10 KB"
+      "limit": "50 KB"
     }
   ],
   "devDependencies": {

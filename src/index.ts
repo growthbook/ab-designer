@@ -18,7 +18,7 @@ function injectCSS(css: string) {
 }
 
 let revert: () => void;
-function mutateDOM(mutations: any[]) {
+function mutateDOM(mutations: DOMMutations) {
   // Undo previous mutations
   if (revert) {
     revert();
@@ -40,7 +40,8 @@ async function takeScreenshot(selector: string) {
   if (el) {
     const canvas = await html2canvas(el as HTMLElement);
     const image = canvas.toDataURL();
-    sendEvent('screenshotTaken', {
+    sendEvent({
+      event: 'screenshotTaken',
       image,
     });
   }
@@ -95,7 +96,8 @@ function onElementClick(e: MouseEvent) {
   e.stopPropagation();
 
   if (lastEl) {
-    sendEvent('elementSelected', {
+    sendEvent({
+      event: 'elementSelected',
       selector: finder(lastEl),
     });
   }
@@ -115,55 +117,23 @@ function stopSelectElement() {
   document.body.style.cursor = '';
 }
 
-function sendEvent<T = any>(event: string, data?: T) {
-  window.parent.postMessage(
-    {
-      event,
-      ...data,
-    },
-    window.EXP_PLATFORM_ORIGIN || '*'
-  );
+function sendEvent(data: OutgoingMessage) {
+  window.parent.postMessage(data, window.EXP_PLATFORM_ORIGIN || '*');
 }
-
-type SelectElementMessage = {
-  command: 'selectElement';
-};
-type StopSelectElementMessage = {
-  command: 'stopSelectElement';
-};
-type TakeScreenshotMessage = {
-  command: 'takeScreenshot';
-  selector: string;
-};
-type MutateDOMMessage = {
-  command: 'mutateDOM';
-  mutations: any[];
-};
-type InjectCSSMessage = {
-  command: 'injectCSS';
-  css: string;
-};
-
-type IncomingMessage =
-  | SelectElementMessage
-  | StopSelectElementMessage
-  | TakeScreenshotMessage
-  | MutateDOMMessage
-  | InjectCSSMessage;
 
 window.addEventListener(
   'message',
-  (event: MessageEvent<IncomingMessage>) => {
+  (event: MessageEvent) => {
     if (
       window.EXP_PLATFORM_ORIGIN &&
       window.EXP_PLATFORM_ORIGIN !== '*' &&
       event.origin !== window.EXP_PLATFORM_ORIGIN
     ) {
-      console.error('Ignoring message from invalid origin', event.origin);
+      console.log('Ignoring message from invalid origin', event.origin);
       return;
     }
 
-    const data = event.data;
+    const data = event.data as IncomingMessage;
     if (!data || !data.command) {
       return;
     }
@@ -183,4 +153,6 @@ window.addEventListener(
 );
 
 // Ready to start accepting commands
-sendEvent('visualDesignerReady');
+sendEvent({
+  event: 'visualDesignerReady',
+});
