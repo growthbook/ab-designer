@@ -55,7 +55,6 @@ Apply the specified DOM mutations to the page using [Dom Mutator](https://github
 {
   "command": "mutateDOM",
   "mutations": [
-    // Selector, mutation type, value
     ["div.example", "setHTML", "Hello <strong>World</strong>"]
   ]
 }
