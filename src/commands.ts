@@ -19,7 +19,7 @@ export function mutateDOM(mutations: DOMMutations) {
     revert();
   }
 
-  let callbacks: (() => void)[];
+  let callbacks: (() => void)[] = [];
 
   mutations.forEach(([selector, mutation, value]) => {
     callbacks.push(mutate(selector, mutation, value));
