@@ -31,16 +31,16 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "visual-abtest-designer",
+  "name": "ab-designer",
   "author": "Jeremy Dorn",
-  "module": "dist/visual-abtest-designer.esm.js",
+  "module": "dist/ab-designer.esm.js",
   "size-limit": [
     {
-      "path": "dist/visual-abtest-designer.cjs.production.min.js",
+      "path": "dist/ab-designer.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/visual-abtest-designer.esm.js",
+      "path": "dist/ab-designer.esm.js",
       "limit": "10 KB"
     }
   ],
