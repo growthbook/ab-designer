@@ -3020,10 +3020,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dom-mutator@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/dom-mutator/-/dom-mutator-0.2.2.tgz#cfcf8ab80903cbdc2e483e4bb9240189a2ab6bdf"
-  integrity sha512-kkQYHhLDebnoG5vC5tynbc78aR7n5cFqfJYy0Q+/Y6HsolGFzC9BxGcehqICtePJ60gQDhSPUsTsT92Z53aLXg==
+dom-mutator@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/dom-mutator/-/dom-mutator-0.2.3.tgz#1b51f09045e0c2f629d4ebcc58ae324f755877d0"
+  integrity sha512-YNfA2C0OB/M2BPmkomaDsaYHQICMq9NK2k3nmQcmhbT0UaoWwP2UzgceTgXvUIi0LqQT19tcU1HobxLpXFgoTg==
 
 dom-serializer@0:
   version "0.2.2"

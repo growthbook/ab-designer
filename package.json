@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@medv/finder": "^2.0.0",
-    "dom-mutator": "^0.2.2",
+    "dom-mutator": "^0.2.3",
     "html2canvas": "^1.0.0-rc.7"
   }
 }
