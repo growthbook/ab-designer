@@ -1,7 +1,6 @@
 import mutate from 'dom-mutator';
 import html2canvas from 'html2canvas';
 import { sendEvent } from './events';
-import { startInspecting, stopInspecting } from './inspector';
 
 let style: HTMLStyleElement;
 export function injectCSS(css: string) {
@@ -40,11 +39,4 @@ export async function takeScreenshot(selector: string) {
       image,
     });
   }
-}
-
-export function selectElement() {
-  startInspecting();
-}
-export function stopSelectElement() {
-  stopInspecting();
 }
