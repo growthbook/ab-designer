@@ -2,6 +2,19 @@ import { finder } from '@medv/finder';
 import { sendEvent } from './events';
 import { getAttributes, getBreadcrumb, getElement } from './util';
 
+// Hack since typescript doesn't define ResizeObserver types yet
+let resizeObserver:
+  | undefined
+  | { observe: (el: Element) => void; unobserve: (el: Element) => void };
+// @ts-ignore
+if (!resizeObserver && typeof window !== 'undefined' && window.ResizeObserver) {
+  // @ts-ignore
+  resizeObserver = new ResizeObserver(() => {
+    refreshElementOutlines();
+  });
+  resizeObserver?.observe(document.body);
+}
+
 let hoverOutline: HTMLElement;
 let hoverOutlineLabel: HTMLElement;
 let selectOutline: HTMLElement;
@@ -53,7 +66,7 @@ let selectOutlineLabel: HTMLElement;
       position: 'absolute',
       border: '3px dashed #029dd1',
       backgrond: 'rgba(2,157,209,0.05)',
-      zIndex: '999999',
+      zIndex: '999998',
       display: 'none',
       pointerEvents: 'none',
     });
@@ -104,6 +117,8 @@ export function selectElement(selector: string, ancestor: number = 0) {
   const el = getElement(selector, ancestor);
   if (el) {
     onSelectElement(el);
+  } else {
+    setSelectOutline();
   }
 }
 export function onSelectElement(el: Element) {
@@ -119,10 +134,27 @@ export function onSelectElement(el: Element) {
   stopInspecting();
   setSelectOutline(el, selector);
 }
+let selectedEl: Element | null = null;
+let hoveredEl: Element | null = null;
 function setHoverOutline(el?: Element, label?: string) {
+  hoveredEl = el || null;
   setOutline(hoverOutline, hoverOutlineLabel, el, label);
 }
 function setSelectOutline(el?: Element, label?: string) {
+  // el changed, what for resize events
+  if (el !== selectedEl && resizeObserver) {
+    // Stop watching the previous element
+    if (selectedEl) {
+      resizeObserver.unobserve(selectedEl);
+    }
+
+    // Start watching the new element
+    if (el) {
+      resizeObserver.observe(el);
+    }
+  }
+
+  selectedEl = el || null;
   setOutline(selectOutline, selectOutlineLabel, el, label);
 }
 
@@ -157,7 +189,6 @@ function onElementClick(e: MouseEvent) {
     onSelectElement(lastEl);
   }
 }
-
 let inspecting = false;
 export function startInspecting() {
   if (inspecting) return;
@@ -165,7 +196,6 @@ export function startInspecting() {
   document.body.addEventListener('mousemove', onElementHover);
   document.body.addEventListener('click', onElementClick);
   document.body.style.cursor = 'pointer';
-
   lastEl = null;
 }
 export function stopInspecting() {
@@ -176,4 +206,12 @@ export function stopInspecting() {
   document.body.style.cursor = '';
   setSelectOutline();
   setHoverOutline();
+}
+export function refreshElementOutlines() {
+  if (selectedEl) {
+    setSelectOutline(selectedEl, finder(selectedEl));
+  }
+  if (hoveredEl) {
+    setHoverOutline(hoveredEl, finder(hoveredEl));
+  }
 }

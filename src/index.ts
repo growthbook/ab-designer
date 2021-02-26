@@ -1,4 +1,4 @@
-import { injectCSS, mutateDOM, takeScreenshot } from './commands';
+import { injectCSS, mutateDOM } from './commands';
 import { sendEvent } from './events';
 import {
   hoverElement,
@@ -41,8 +41,10 @@ window.addEventListener(
       selectElement(data.selector, data.ancestor || 0);
     } else if (data.command === 'hoverElement') {
       hoverElement(data.selector, data.ancestor || 0);
-    } else if (data.command === 'takeScreenshot') {
-      takeScreenshot(data.selector);
+    } else if (data.command === 'isReady') {
+      sendEvent({
+        event: 'visualDesignerReady',
+      });
     }
   },
   false

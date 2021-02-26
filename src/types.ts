@@ -21,21 +21,16 @@ type ElementSelectedEvent = {
   innerHTML: string;
   attributes: ElementAttribute[];
 };
-type ScreenshotTakenEvent = {
-  event: 'screenshotTaken';
-  image: string;
-};
-type OutgoingMessage =
-  | ReadyEvent
-  | ElementHoverEvent
-  | ElementSelectedEvent
-  | ScreenshotTakenEvent;
+type OutgoingMessage = ReadyEvent | ElementHoverEvent | ElementSelectedEvent;
 
 type StartInspectingCommand = {
   command: 'startInspecting';
 };
 type StopInspectingCommand = {
   command: 'stopInspecting';
+};
+type IsReadyCommand = {
+  command: 'isReady';
 };
 type HoverElementCommand = {
   command: 'hoverElement';
@@ -55,10 +50,6 @@ type MutateDOMMessage = {
   command: 'mutateDOM';
   mutations: DOMMutations;
 };
-type TakeScreenshotMessage = {
-  command: 'takeScreenshot';
-  selector: string;
-};
 
 type IncomingMessage =
   | StartInspectingCommand
@@ -67,7 +58,7 @@ type IncomingMessage =
   | SelectElementCommand
   | InjectCSSMessage
   | MutateDOMMessage
-  | TakeScreenshotMessage;
+  | IsReadyCommand;
 
 // TODO: [string, MutationType, string][]
 // Currently throwing an error due to mismatched typescript versions

@@ -1,6 +1,4 @@
 import mutate from 'dom-mutator';
-import html2canvas from 'html2canvas';
-import { sendEvent } from './events';
 
 let style: HTMLStyleElement;
 export function injectCSS(css: string) {
@@ -27,16 +25,4 @@ export function mutateDOM(mutations: DOMMutations) {
   revert = () => {
     callbacks.forEach(f => f());
   };
-}
-
-export async function takeScreenshot(selector: string) {
-  const el = document.querySelector(selector);
-  if (el) {
-    const canvas = await html2canvas(el as HTMLElement);
-    const image = canvas.toDataURL();
-    sendEvent({
-      event: 'screenshotTaken',
-      image,
-    });
-  }
 }
