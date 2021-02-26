@@ -4,13 +4,12 @@ This is one half of an interactive visual A/B test designer like the ones in Opt
 
 Features:
 *  Click to select elements like you would with DevTools
-*  Take screenshots of the entire page or specific elements (using html2canvas)
 *  Apply DOM mutations and inject CSS on the target site to preview A/B test variations
 
 How it works:
 1.  The Experimentation Platform (ExP) loads the target site in an iframe
-2.  The ExP sends commands to the iframe using postMessage (e.g. "select element", "take screenshot", "mutate DOM")
-3.  The iframe sends data back to the ExP also using postMessage (e.g. the CSS selector of the element, screenshot image data)
+2.  The ExP sends commands to the iframe using postMessage (e.g. "select element", "inject CSS", "mutate DOM")
+3.  The iframe sends data back to the ExP also using postMessage (e.g. the selected element data)
 
 ## Installation
 
@@ -26,7 +25,7 @@ On the target page you want to run an A/B test on:
 
 These commands are sent from the Experimentation Platform to this script running within an iframe using postMessage.
 
-### selectElement
+### startInspecting
 
 Acts like the DevTools Inspect tool.  As you hover over elements, they are highlighted and the selector is shown in a tooltip.
 
@@ -36,7 +35,7 @@ Acts like the DevTools Inspect tool.  As you hover over elements, they are highl
 }
 ```
 
-### stopSelectElement
+### stopInspecting
 
 Stops the DevTools Inspect behavior and goes back to an interactive page.
 
@@ -46,16 +45,32 @@ Stops the DevTools Inspect behavior and goes back to an interactive page.
 }
 ```
 
-### takeScreenshot
+### hoverElement
 
-Take a screenshot of the specified element using [html2canvas](https://github.com/niklasvh/html2canvas).
+Forces the hover state for the specified element
 
 ```json
 {
-  "command": "takeScreenshot",
-  "selector": "body"
+  "command": "hoverElement",
+  "selector": "h1",
+  "ancestor": 0
 }
 ```
+The ancestor property lets you specify how far up the DOM tree to walk from the selector before applying the hover. `0` means use the element directly, `1` means use the parent, `2` is the grandparent, etc..
+
+### selectElement
+
+Forces the selected state for the specified element
+
+```json
+{
+  "command": "selectElement",
+  "selector": "h1",
+  "ancestor": 0
+}
+```
+
+The ancestor property lets you specify how far up the DOM tree to walk from the selector before applying the selected state. `0` means use the element directly, `1` means use the parent, `2` is the grandparent, etc..
 
 ### mutateDOM
 
@@ -81,17 +96,40 @@ Inject the specified CSS to the page in an inline `<style>` tag. Like mutate, th
 }
 ```
 
+### isReady
+
+Check if the script is loaded and ready. Causes the iframe to send the `visualDesignerReady` event in response.
+
+```json
+{
+  "command": "isReady"
+}
+```
+
 ## Events
 
 These events are sent back to the parent page via postMessage
 
 ### visualDesignerReady
 
-Sent when the page finishes loading.
+Sent when the page finishes loading or when an `isReady` command is sent.
 
 ```json
 {
   "event": "visualDesignerReady"
+}
+```
+
+### elementHover
+
+Sent when a new element is hovered over while in Inspector mode.  Uses the [Finder](https://github.com/antonmedv/finder) library to generate unique CSS selectors.
+
+```json
+{
+  "event": "elementHover",
+  "selector": ".my-title",
+  "display": "h1",
+  "breadcrumb": ["html","body","main","div"]
 }
 ```
 
@@ -102,17 +140,15 @@ Sent when an element is clicked while in DevTools Inspect mode.  Uses the [Finde
 ```json
 {
   "event": "elementSelected",
-  "selector": "div.example"
-}
-```
-
-### screenshotTaken
-
-Sent when a screenshot is taken.
-
-```json
-{
-  "event": "screenshotTaken",
-  "image": "data:image/png;base64,iV..."
+  "selector": ".link",
+  "display": "a",
+  "breadcrumb": ["html","body","main","div"],
+  "innerHTML": "Click Here",
+  "attributes": [
+    {
+      "name": "href",
+      "value": "/about"
+    }
+  ]
 }
 ```

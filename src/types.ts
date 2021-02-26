@@ -1,41 +1,64 @@
+type ElementBreadcrumb = string[];
+type ElementAttribute = {
+  name: string;
+  value: string;
+};
+
 type ReadyEvent = {
   event: 'visualDesignerReady';
+};
+type ElementHoverEvent = {
+  event: 'elementHover';
+  selector: string;
+  display: string;
+  breadcrumb: ElementBreadcrumb;
 };
 type ElementSelectedEvent = {
   event: 'elementSelected';
   selector: string;
+  display: string;
+  breadcrumb: ElementBreadcrumb;
+  innerHTML: string;
+  attributes: ElementAttribute[];
 };
-type ScreenshotTakenEvent = {
-  event: 'screenshotTaken';
-  image: string;
-};
-type OutgoingMessage = ReadyEvent | ElementSelectedEvent | ScreenshotTakenEvent;
+type OutgoingMessage = ReadyEvent | ElementHoverEvent | ElementSelectedEvent;
 
-type SelectElementMessage = {
-  command: 'selectElement';
+type StartInspectingCommand = {
+  command: 'startInspecting';
 };
-type StopSelectElementMessage = {
-  command: 'stopSelectElement';
+type StopInspectingCommand = {
+  command: 'stopInspecting';
 };
-type TakeScreenshotMessage = {
-  command: 'takeScreenshot';
+type IsReadyCommand = {
+  command: 'isReady';
+};
+type HoverElementCommand = {
+  command: 'hoverElement';
   selector: string;
+  ancestor: number;
 };
-type MutateDOMMessage = {
-  command: 'mutateDOM';
-  mutations: DOMMutations;
+type SelectElementCommand = {
+  command: 'selectElement';
+  selector: string;
+  ancestor: number;
 };
 type InjectCSSMessage = {
   command: 'injectCSS';
   css: string;
 };
+type MutateDOMMessage = {
+  command: 'mutateDOM';
+  mutations: DOMMutations;
+};
 
 type IncomingMessage =
-  | SelectElementMessage
-  | StopSelectElementMessage
-  | TakeScreenshotMessage
+  | StartInspectingCommand
+  | StopInspectingCommand
+  | HoverElementCommand
+  | SelectElementCommand
+  | InjectCSSMessage
   | MutateDOMMessage
-  | InjectCSSMessage;
+  | IsReadyCommand;
 
 // TODO: [string, MutationType, string][]
 // Currently throwing an error due to mismatched typescript versions

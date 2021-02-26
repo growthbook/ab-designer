@@ -1,11 +1,11 @@
-import {
-  injectCSS,
-  mutateDOM,
-  selectElement,
-  stopSelectElement,
-  takeScreenshot,
-} from './commands';
+import { injectCSS, mutateDOM } from './commands';
 import { sendEvent } from './events';
+import {
+  hoverElement,
+  selectElement,
+  startInspecting,
+  stopInspecting,
+} from './inspector';
 
 declare global {
   interface Window {
@@ -33,12 +33,18 @@ window.addEventListener(
       injectCSS(data.css);
     } else if (data.command === 'mutateDOM') {
       mutateDOM(data.mutations);
+    } else if (data.command === 'startInspecting') {
+      startInspecting();
+    } else if (data.command === 'stopInspecting') {
+      stopInspecting();
     } else if (data.command === 'selectElement') {
-      selectElement();
-    } else if (data.command === 'stopSelectElement') {
-      stopSelectElement();
-    } else if (data.command === 'takeScreenshot') {
-      takeScreenshot(data.selector);
+      selectElement(data.selector, data.ancestor || 0);
+    } else if (data.command === 'hoverElement') {
+      hoverElement(data.selector, data.ancestor || 0);
+    } else if (data.command === 'isReady') {
+      sendEvent({
+        event: 'visualDesignerReady',
+      });
     }
   },
   false
