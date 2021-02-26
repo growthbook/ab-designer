@@ -116,13 +116,13 @@ export function hoverElement(selector: string, ancestor: number = 0) {
 export function selectElement(selector: string, ancestor: number = 0) {
   const el = getElement(selector, ancestor);
   if (el) {
-    onSelectElement(el);
+    onSelectElement(el, selector);
   } else {
     setSelectOutline();
   }
 }
-export function onSelectElement(el: Element) {
-  const selector = finder(el);
+export function onSelectElement(el: Element, selector?: string) {
+  if (!selector) selector = finder(el);
   sendEvent({
     event: 'elementSelected',
     selector,
