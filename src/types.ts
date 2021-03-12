@@ -48,7 +48,12 @@ type InjectCSSMessage = {
 };
 type MutateDOMMessage = {
   command: 'mutateDOM';
-  mutations: DOMMutations;
+  mutations: {
+    selector: string;
+    action: 'set' | 'append' | 'remove';
+    attribute: string;
+    value: string;
+  }[];
 };
 
 type IncomingMessage =
@@ -59,7 +64,3 @@ type IncomingMessage =
   | InjectCSSMessage
   | MutateDOMMessage
   | IsReadyCommand;
-
-// TODO: [string, MutationType, string][]
-// Currently throwing an error due to mismatched typescript versions
-type DOMMutations = any[];

@@ -54,6 +54,6 @@
   },
   "dependencies": {
     "@medv/finder": "^2.0.0",
-    "dom-mutator": "^0.2.4"
+    "dom-mutator": "^0.3.1"
   }
 }

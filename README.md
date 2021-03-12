@@ -80,7 +80,12 @@ Apply the specified DOM mutations to the page using [Dom Mutator](https://github
 {
   "command": "mutateDOM",
   "mutations": [
-    ["div.example", "setHTML", "Hello <strong>World</strong>"]
+    {
+      "selector": "h1",
+      "action": "set",
+      "attribute": "html",
+      "value": "Hello <strong>World</strong>"
+    }
   ]
 }
 ```

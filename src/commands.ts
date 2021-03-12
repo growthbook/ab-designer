@@ -1,4 +1,4 @@
-import mutate from 'dom-mutator';
+import mutate, { DeclarativeMutation } from 'dom-mutator';
 
 let style: HTMLStyleElement;
 export function injectCSS(css: string) {
@@ -10,7 +10,7 @@ export function injectCSS(css: string) {
 }
 
 let revert: () => void;
-export function mutateDOM(mutations: DOMMutations) {
+export function mutateDOM(mutations: DeclarativeMutation[]) {
   // Undo previous mutations
   if (revert) {
     revert();
@@ -18,8 +18,9 @@ export function mutateDOM(mutations: DOMMutations) {
 
   let callbacks: (() => void)[] = [];
 
-  mutations.forEach(([selector, mutation, value]) => {
-    callbacks.push(mutate(selector, mutation, value));
+  mutations.forEach(mutation => {
+    const controller = mutate.declarative(mutation);
+    callbacks.push(controller.revert);
   });
 
   revert = () => {
