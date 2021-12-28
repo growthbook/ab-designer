@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build --format umd",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
@@ -36,11 +36,7 @@
   "module": "dist/ab-designer.esm.js",
   "size-limit": [
     {
-      "path": "dist/ab-designer.cjs.production.min.js",
-      "limit": "50 KB"
-    },
-    {
-      "path": "dist/ab-designer.esm.js",
+      "path": "dist/ab-designer.umd.production.min.js",
       "limit": "50 KB"
     }
   ],

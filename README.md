@@ -18,7 +18,7 @@ On the target page you want to run an A/B test on:
 ```html
 <!-- The origin of your experimentation platform (for security) -->
 <script>window.EXP_PLATFORM_ORIGIN="https://example.com";</script>
-<script async src="https://unpkg.com/ab-designer/dist/ab-designer.cjs.production.min.js"></script>
+<script async src="https://unpkg.com/ab-designer/dist/ab-designer.umd.production.min.js"></script>
 ```
 
 ## Commands
