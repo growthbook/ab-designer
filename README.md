@@ -31,7 +31,7 @@ Acts like the DevTools Inspect tool.  As you hover over elements, they are highl
 
 ```json
 {
-  "command": "selectElement"
+  "command": "startInspecting"
 }
 ```
 
@@ -41,7 +41,7 @@ Stops the DevTools Inspect behavior and goes back to an interactive page.
 
 ```json
 {
-  "command": "stopSelectElement"
+  "command": "stopInspecting"
 }
 ```
 
